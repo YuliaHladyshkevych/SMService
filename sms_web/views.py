@@ -1,4 +1,5 @@
 import logging
+import re
 
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -17,12 +18,23 @@ def home(request):
     return render(request, "home.html")
 
 
+def is_valid_phone(phone):
+    phone_regex = re.compile(r"^\+\d{1,3}\d{9,15}$")
+    return bool(phone_regex.match(phone))
+
+
 @csrf_exempt
 def send_sms(request):
     if request.method == "POST":
 
         phone = request.POST.get("phone")
         message = request.POST.get("message")
+
+        if not is_valid_phone(phone):
+            return JsonResponse(
+                {"status": "error", "message": "Invalid phone number"}
+            )
+
         client = Client(settings.TWILIO_ACCOUNT_SID,
                         settings.TWILIO_AUTH_TOKEN)
 
