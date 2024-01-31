@@ -9,3 +9,6 @@ class SendSMS(models.Model):
     class Meta:
         verbose_name_plural = "sms"
         ordering = ["-timestamp"]
+
+    def __str__(self):
+        return f"{self.phone} - {self.timestamp}"
