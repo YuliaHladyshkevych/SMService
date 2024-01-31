@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from twilio.rest import Client
 
-from sms.models import SendSMS
+from sms_web.models import SendSMS
 from sms_service import settings
 
 logging.basicConfig(filename="logs", level=logging.INFO,

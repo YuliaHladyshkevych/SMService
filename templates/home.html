@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>Send SMS</h1>
-<form method="post" action="{% url "sms:send_sms" %}">
+<form method="post" action="{% url "sms_web:send_sms" %}">
   {% csrf_token %}
   <label for="phone">Phone:</label>
   <input type="text" id="phone" name="phone" required><br>

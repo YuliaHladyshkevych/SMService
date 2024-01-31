@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from sms.models import SendSMS
+from sms_web.models import SendSMS
 
 admin.site.register(SendSMS)

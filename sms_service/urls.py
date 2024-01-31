@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("home/", include("sms.urls",  namespace="sms")),
+    path("", include("sms_web.urls", namespace="sms_web")),
+    path("", include("sms_api.urls", namespace="sms_api")),
 ]
