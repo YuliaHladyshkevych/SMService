@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -9,6 +10,11 @@ from sms_service import settings
 from sms_web.models import SendSMS
 
 
+def is_valid_phone(phone):
+    phone_regex = re.compile(r"^\+\d{1,3}\d{9,15}$")
+    return bool(phone_regex.match(phone))
+
+
 @csrf_exempt
 def send_sms_api(request):
     if request.method == "POST":
@@ -16,6 +22,12 @@ def send_sms_api(request):
         data = json.loads(request.body.decode("utf-8"))
         phone = data.get("phone")
         message = data.get("message")
+
+        if not is_valid_phone(phone):
+            return JsonResponse(
+                {"status": "error", "message": "Invalid phone number"}
+            )
+
         client = Client(settings.TWILIO_ACCOUNT_SID,
                         settings.TWILIO_AUTH_TOKEN)
 
