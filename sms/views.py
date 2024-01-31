@@ -1,3 +1,5 @@
+import logging
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -5,6 +7,9 @@ from twilio.rest import Client
 
 from sms.models import SendSMS
 from sms_service import settings
+
+logging.basicConfig(filename="logs", level=logging.INFO,
+                    format="%(asctime)s %(message)s")
 
 
 @csrf_exempt
@@ -22,19 +27,19 @@ def send_sms(request):
                         settings.TWILIO_AUTH_TOKEN)
 
         try:
-            print("Sending SMS")
             message = client.messages.create(
                 body=message,
                 from_="+12256358610",
                 to=phone,
             )
             SendSMS.objects.create(phone=phone, message=message.body)
+            logging.info(f"SMS was successfully sent to {phone}")
             return JsonResponse(
                 {"status": "success",
-                 "message": f"SMS sent successfully to {phone}"}
+                 "message": f"SMS was successfully sent to {phone}"}
             )
         except Exception as e:
-            print(str(e))
+            logging.error(f"Error sending SMS to {phone}: {str(e)}")
             return JsonResponse({'status': 'error', 'message': str(e)})
 
     return JsonResponse(
