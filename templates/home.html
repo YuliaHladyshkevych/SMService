@@ -8,13 +8,15 @@
 </head>
 <body>
 <h1>Send SMS</h1>
-{% csrf_token %}
-<label for="phone">Phone:</label>
-<input type="text" id="phone" name="phone" required><br>
+<form method="post" action="{% url "sms:send_sms" %}">
+  {% csrf_token %}
+  <label for="phone">Phone:</label>
+  <input type="text" id="phone" name="phone" required><br>
 
-<label for="message">Message:</label>
-<textarea id="message" name="message" required></textarea><br>
+  <label for="message">Message:</label>
+  <textarea id="message" name="message" required></textarea><br>
 
-<button type="button">Send SMS</button>
+  <button type="submit">Send SMS</button>
+</form>
 </body>
 </html>
